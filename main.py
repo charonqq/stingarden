@@ -1,31 +1,30 @@
 import discord
 from discord.ext import commands
-import youtube_dl
+import os
 
 intents = discord.Intents.default()
-intents.voice_states = True
+intents.typing = False
+intents.presences = False
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='/', intents=intents)
 
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user.name}')
 
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
+#remove the default help command so that we can write out own
+bot.remove_command('help')
 
-    await bot.process_commands(message)
-
-@bot.command()
-async def set(ctx):
-    await ctx.send("Bot is now active in this server!")
-
-initial_extensions = ['cogs.music']
+# Load extensions (cogs)
+initial_extensions = [
+    'cogs.help_cog',         # Assuming help_cog.py is in the cogs folder
+    'cogs.music_cog_class',  # Assuming music_cog_class.py is in the cogs folder
+]
 
 if __name__ == '__main__':
     for extension in initial_extensions:
         bot.load_extension(extension)
 
-bot.run('MTE0NDk0ODk4NjM0NDY0MDYwMw.GzlBfv.I3CjTs2XfNJd0h8gtzri7HGTSIcbcCsZlxj--0')
+# Load the token from environment variables
+bot.run(os.getenv("DISCORD_TOKEN"))
+
+
+#start the bot with our token
+bot.run(os.getenv("MTE0NDk0ODk4NjM0NDY0MDYwMw.GeW7vb.9Zwv5u6Cn6P6JlRaI0bZt0qpj3UkgLdtKqa7rY"))
